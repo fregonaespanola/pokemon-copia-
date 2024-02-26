@@ -1,0 +1,30 @@
+<table>
+    <thead>
+      <tr>
+        <th>Imagen</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Ataques</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let pokemon of pokemons">
+        <td>
+          <img [src]="pokemon.imagen" alt="Imagen de {{ pokemon.nombre }}" width="100">
+          <img [src]="pokemon.tipo.imagen" alt="Tipo {{ pokemon.tipo.nombre }}" width="50">
+        </td>
+        <td>{{ pokemon.nombre }}</td>
+        <td>{{ pokemon.descripcion }}</td>
+        <td>
+          <ul>
+            <li *ngFor="let ataque of pokemon.ataques">
+              {{ ataque.nombre }} - <img [src]="ataque.tipo.imagen" alt="Tipo {{ ataque.tipo.nombre }}" width="50">
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  

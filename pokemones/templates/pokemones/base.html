@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<head>
+    <title>Pinguinos - 
+        {% block titulo %}
+
+        {% endblock titulo %}
+
+    </title>
+</head>
+<body>
+    <a href="{% url 'pokemones:index' %}">Home</a><br>
+    {% if user.is_authenticated %}
+        {{ user }} 
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">logout</button>
+        </form>
+    {% else %}
+    <a href="{% url 'login' %}">Entrar</a>
+    {% endif %}
+    {% block contenido %}
+
+    {% endblock contenido %}
+</body>
+</html>
