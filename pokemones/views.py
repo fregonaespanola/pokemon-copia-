@@ -11,7 +11,7 @@ from .models import Pokemon
 from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework import viewsets, status
 
-from .serializers import PokemonSerializer, UserSerializer
+from .serializers import UserSerializer, PokemonListSerializer, PokemonDetailSerializer
 
 
 # Create your views here.
@@ -21,7 +21,9 @@ class Listado(generic.ListView):
     paginate_by = 4
     authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
     permission_classes = [IsAuthenticated]
-class Detalle( generic.DetailView):
+
+
+class Detalle(generic.DetailView):
     template_name = "pokemones/detalle.html"
     model = Pokemon
     authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
@@ -33,9 +35,15 @@ class PokemonViewSet(viewsets.ModelViewSet):
     API endpoint that allows users to be viewed or edited.
     """
     queryset = Pokemon.objects.all()
-    serializer_class = PokemonSerializer
+    serializer_class = PokemonListSerializer
     authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
     permission_classes = [IsAuthenticated]
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = PokemonDetailSerializer(instance)
+        return Response(serializer.data)
+
 
 @api_view(['POST'])
 def register_user(request):

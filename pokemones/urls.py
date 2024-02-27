@@ -8,4 +8,5 @@ urlpatterns = [
     path("", Listado.as_view(), name="index"),
     path("<int:pk>/", Detalle.as_view(), name="detalle"),
     path('register/', register_user, name='register'),
+    path('api/<int:pk>/', views.PokemonViewSet.as_view({'get': 'retrieve'}), name='pokemon-detail'),
 ]

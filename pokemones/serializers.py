@@ -7,22 +7,34 @@ from rest_framework import serializers
 class TipoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tipo
-        fields = ['nombre', 'color','imagen']
+        fields = ['nombre', 'color', 'imagen']
+
 
 class AtaqueSerializer(serializers.ModelSerializer):
-    tipo = TipoSerializer() 
+    tipo = TipoSerializer()
 
     class Meta:
         model = Ataque
-        fields = ['nombre', 'tipo'] 
+        fields = ['nombre', 'tipo']
 
 
-class PokemonSerializer(serializers.HyperlinkedModelSerializer):
+class PokemonListSerializer(serializers.ModelSerializer):
     tipo = TipoSerializer()
-    ataques = AtaqueSerializer(many=True)
+
     class Meta:
         model = Pokemon
-        fields = ['nombre', 'descripcion', 'tipo', 'ataques', 'imagen']
+        fields = ['id', 'nombre', 'tipo', 'imagen']
+
+
+class PokemonDetailSerializer(serializers.ModelSerializer):
+    tipo = TipoSerializer()
+    ataques = AtaqueSerializer(many=True)
+
+    class Meta:
+        model = Pokemon
+        fields = '__all__'
+
+
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 

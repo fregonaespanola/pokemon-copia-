@@ -8,11 +8,9 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let pokemon of pokemons">
+  <tr>
     <td>
-      <a [routerLink]="['/pokemon', pokemon.id]">
-        <img [src]="pokemon.imagen" alt="Imagen de {{ pokemon.nombre }}" width="100">
-      </a>
+      <img [src]="pokemon.imagen" alt="Imagen de {{ pokemon.nombre }}" width="100">
       <img [src]="pokemon.tipo.imagen" alt="Tipo {{ pokemon.tipo.nombre }}" width="50">
     </td>
     <td>{{ pokemon.nombre }}</td>
@@ -27,6 +25,4 @@
   </tr>
   </tbody>
 </table>
-
-
 
