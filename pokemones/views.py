@@ -6,15 +6,19 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
+from rest_framework import generics
 from .models import Pokemon
 from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework import viewsets, status
+from rest_framework.pagination import PageNumberPagination
 
 from .serializers import UserSerializer, PokemonListSerializer, PokemonDetailSerializer
 
+class PokemonPagination(PageNumberPagination):
+    page_size = 4  # Especifica el número de pokemon por página
+    #page_size_query_param = 'page_size'  # Parámetro opcional para permitir que el cliente especifique el tamaño de página
+    #max_page_size = 1000  # Límite máximo para el tamaño de página
 
-# Create your views here.
 class Listado(generic.ListView):
     template_name = "pokemones/listado.html"
     model = Pokemon
@@ -30,7 +34,7 @@ class Detalle(generic.DetailView):
     permission_classes = [IsAuthenticated]
 
 
-class PokemonViewSet(viewsets.ModelViewSet):
+class PokemonListView(generics.ListAPIView):
     """
     API endpoint that allows users to be viewed or edited.
     """
@@ -38,11 +42,16 @@ class PokemonViewSet(viewsets.ModelViewSet):
     serializer_class = PokemonListSerializer
     authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
     permission_classes = [IsAuthenticated]
+    pagination_class =PokemonPagination
 
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = PokemonDetailSerializer(instance)
-        return Response(serializer.data)
+class PokemonDetailView(generics.RetrieveAPIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Pokemon.objects.all()
+    serializer_class = PokemonDetailSerializer
+    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
 
 @api_view(['POST'])

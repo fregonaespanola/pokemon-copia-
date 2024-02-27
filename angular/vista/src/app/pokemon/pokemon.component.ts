@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {PokemonService} from "../app.service";
-
+import { ActivatedRoute } from '@angular/router';
+import { PokemonService } from "../app.service";
 
 @Component({
   selector: 'app-pokemon',
@@ -9,18 +9,29 @@ import {PokemonService} from "../app.service";
 })
 export class PokemonComponent implements OnInit {
   pokemons: any[] = [];
+  currentPage: number = 1; // Página actual, por defecto es 1
 
-  constructor(private pokemonService: PokemonService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private pokemonService: PokemonService
+  ) {}
 
   ngOnInit(): void {
-    this.getPokemons();
+    this.route.queryParams.subscribe(params => {
+      this.currentPage = +params['page'] || 1; // Obtener el parámetro 'page' de la URL, si no existe, usar 1 por defecto
+      this.getPokemons(this.currentPage); // Obtener los pokemons de la página actual al inicializar el componente
+    });
   }
 
-  getPokemons(): void {
-    this.pokemonService.getPokemons()
+  getPokemons(page: number): void {
+    this.pokemonService.getPokemons(page) // Pasar el número de página al método getPokemons del servicio
       .subscribe(
-        (pokemons: any[]) => {
-          this.pokemons = pokemons;
+        (response: any) => {
+          if (response.results) {
+            this.pokemons = response.results;
+          } else {
+            this.pokemons = response;
+          }
         },
         (error) => {
           console.error('Error fetching pokemons:', error);

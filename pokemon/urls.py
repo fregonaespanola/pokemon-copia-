@@ -3,11 +3,10 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.contrib.auth.views import LogoutView
 from . import settings
-from pokemones.views import PokemonViewSet
 from rest_framework import routers
 from rest_framework.authtoken import views as viewsfr
 router = routers.DefaultRouter()
-router.register(r'api', PokemonViewSet)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
