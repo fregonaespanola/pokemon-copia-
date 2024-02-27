@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'pokemones',
     'rest_framework',
+    'rest_framework.authtoken',
     'allauth',
     'allauth.account',
     'corsheaders',

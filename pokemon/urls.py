@@ -5,7 +5,7 @@ from django.contrib.auth.views import LogoutView
 from . import settings
 from pokemones.views import PokemonViewSet
 from rest_framework import routers
-
+from rest_framework.authtoken import views as viewsfr
 router = routers.DefaultRouter()
 router.register(r'api', PokemonViewSet)
 
@@ -15,6 +15,7 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path('accounts/', include('allauth.urls')),
     path('', include('pokemones.urls')),
+    path('api-token-auth/', viewsfr.obtain_auth_token),
 ]
 
 urlpatterns += router.urls
