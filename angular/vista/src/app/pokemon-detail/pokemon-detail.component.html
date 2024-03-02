@@ -1,28 +1,21 @@
-<table>
-  <thead>
-  <tr>
-    <th>Imagen</th>
-    <th>Nombre</th>
-    <th>Descripción</th>
-    <th>Ataques</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr>
-    <td>
-      <img [src]="pokemon.imagen" alt="Imagen de {{ pokemon.nombre }}" width="100">
-      <img [src]="pokemon.tipo.imagen" alt="Tipo {{ pokemon.tipo.nombre }}" width="50">
-    </td>
-    <td>{{ pokemon.nombre }}</td>
-    <td>{{ pokemon.descripcion }}</td>
-    <td>
+<div class="pokemon-detail">
+  <div class="pokemon-header">
+    <img [src]="pokemon.imagen" alt="Imagen de {{ pokemon.nombre }}">
+    <img [src]="pokemon.tipo.imagen" alt="Tipo {{ pokemon.tipo.nombre }}">
+  </div>
+  <div class="pokemon-info">
+    <h2>{{ pokemon.nombre }}</h2>
+    <p>{{ pokemon.descripcion }}</p>
+    <div class="ataques">
+      <h3>Ataques</h3>
       <ul>
         <li *ngFor="let ataque of pokemon.ataques">
-          {{ ataque.nombre }} - <img [src]="ataque.tipo.imagen" alt="Tipo {{ ataque.tipo.nombre }}" width="50">
+          {{ ataque.nombre }} - <img [src]="ataque.tipo.imagen" alt="Tipo {{ ataque.tipo.nombre }}">
         </li>
       </ul>
-    </td>
-  </tr>
-  </tbody>
-</table>
-
+    </div>
+    <div class="button-container">
+      <button (click)="goBack()">Volver</button>
+    </div>
+  </div>
+</div>
