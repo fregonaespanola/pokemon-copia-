@@ -34,3 +34,28 @@ table {
     height: auto;
     filter: drop-shadow(0 1px 5px rgba(0, 0, 0, 0.4));
   }
+
+  .botones{
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  button{
+    width: auto;
+    padding: 10px;
+    margin-left: 10px;
+    background-color: #ff0000;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #b30000;
+  }
+
+  button:disabled {
+    background-color: #310000;
+    color: #3d3d3d;
+  }

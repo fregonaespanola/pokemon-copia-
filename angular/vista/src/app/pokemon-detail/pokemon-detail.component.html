@@ -1,4 +1,4 @@
-<div class="pokemon-detail">
+<div class="pokemon-detail" [style.backgroundColor]="pokemon.tipo.color">
   <div class="pokemon-header">
     <img [src]="pokemon.imagen" alt="Imagen de {{ pokemon.nombre }}">
     <img [src]="pokemon.tipo.imagen" alt="Tipo {{ pokemon.tipo.nombre }}">

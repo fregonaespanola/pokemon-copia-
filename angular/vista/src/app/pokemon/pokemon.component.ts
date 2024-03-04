@@ -10,6 +10,7 @@ import { PokemonService } from "../app.service";
 export class PokemonComponent implements OnInit {
   pokemons: any[] = [];
   currentPage: number = 1; // Página actual, por defecto es 1
+  hasNextPage = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -37,5 +38,52 @@ export class PokemonComponent implements OnInit {
           console.error('Error fetching pokemons:', error);
         }
       );
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+  
+      // Verificar si hay datos en la página anterior antes de permitir la navegación
+      this.pokemonService.getPokemons(this.currentPage).subscribe(
+        (response: any) => {
+          if (response.results && response.results.length > 0) {
+            // Si hay datos, permitir la navegación
+            this.getPokemons(this.currentPage);
+            this.hasNextPage = true;
+          } else {
+            // Si no hay datos, deshabilitar la navegación
+            this.hasNextPage = false;
+          }
+        },
+        (error) => {
+          console.error('Error fetching pokemons:', error);
+        }
+      );
+    }
+  }
+  
+
+  nextPage(): void {
+    // Verificar si hay datos en la siguiente página antes de permitir la navegación
+    this.pokemonService.getPokemons(this.currentPage + 1).subscribe(
+      (response: any) => {
+        if (response.results && response.results.length > 0) {
+          // Si hay datos, permitir la navegación
+          this.currentPage++;
+          this.getPokemons(this.currentPage);
+        }
+       
+        if(response.next == null){
+          this.hasNextPage = false;
+        }else{
+          this.hasNextPage = true;
+        }
+        console.log(this.hasNextPage);
+      },
+      (error) => {
+        console.error('Error fetching pokemons:', error);
+      }
+    );
   }
 }

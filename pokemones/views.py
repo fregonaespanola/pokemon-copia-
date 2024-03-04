@@ -15,7 +15,7 @@ from rest_framework.pagination import PageNumberPagination
 from .serializers import UserSerializer, PokemonListSerializer, PokemonDetailSerializer
 
 class PokemonPagination(PageNumberPagination):
-    page_size = 4  # Especifica el número de pokemon por página
+    page_size = 1 # Especifica el número de pokemon por página
     #page_size_query_param = 'page_size'  # Parámetro opcional para permitir que el cliente especifique el tamaño de página
     #max_page_size = 1000  # Límite máximo para el tamaño de página
 
