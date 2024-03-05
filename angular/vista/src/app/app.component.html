@@ -1,15 +1,16 @@
 <header>
-    <nav>
-        <ul>
-            <li><a>Home</a></li>
-            <li><a>Listado</a></li>
-            <li class="cerrar"><a>Cerrar Sesion</a></li>
-        </ul>
-    </nav>
+  <nav>
+    <ul>
+      <li><a>Home</a></li>
+      <li><a>Listado</a></li>
+      <li class="cerrar" (click)="logout()"><a>Cerrar Sesion</a></li>
+
+    </ul>
+  </nav>
 </header>
 
 <router-outlet></router-outlet>
 
 <footer>
-    <p>© 2022 My Website</p>
+  <p>© 2022 My Website</p>
 </footer>

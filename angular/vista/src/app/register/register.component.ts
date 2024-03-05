@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {PokemonService} from "../app.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-register',
@@ -10,21 +11,22 @@ import {PokemonService} from "../app.service";
 export class RegisterComponent {
   username: string = "";
   password: string = "";
+  password2: string = "";
 
-  constructor(private http: HttpClient, private pokemonService: PokemonService) {
+  constructor(private http: HttpClient, private pokemonService: PokemonService, private router: Router) {
   }
 
   register() {
     const newUser = {
       username: this.username,
       password1: this.password,
-      password2: this.password
+      password2: this.password2
     };
     this.pokemonService.register(newUser)
       .subscribe(
         response => {
           console.log('Usuario registrado con éxito:', response);
-          // Handle the response appropriately, for example, redirecting the user to the login page
+          this.router.navigate(['/']);
         },
         error => {
           console.error('Error al registrar usuario:', error);
