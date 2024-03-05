@@ -1,5 +1,6 @@
 from typing import Any
 
+from allauth.socialaccount.providers.github.views import GitHubOAuth2Adapter
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from django.db.models.query import QuerySet
@@ -61,17 +62,13 @@ class PokemonDetailView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
 
 
-@api_view(['POST'])
-def register_user(request):
-    if request.method == 'POST':
-        serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 class GoogleLogin(SocialLoginView):  # if you want to use Authorization Code Grant, use this
     adapter_class = GoogleOAuth2Adapter
-    callback_url = 'http://localhost:8000/accounts/google/login/callback/'
+    callback_url = 'http://localhost:4200'
+    client_class = OAuth2Client
+
+
+class GithubLogin(SocialLoginView):  # if you want to use Authorization Code Grant, use this
+    adapter_class = GitHubOAuth2Adapter
+    callback_url = 'http://localhost:4200/'
     client_class = OAuth2Client

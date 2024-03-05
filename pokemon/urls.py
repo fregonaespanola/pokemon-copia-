@@ -3,7 +3,7 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.contrib.auth.views import LogoutView
 
-from pokemones.views import GoogleLogin
+from pokemones.views import GoogleLogin, GithubLogin
 from . import settings
 from rest_framework import routers
 from rest_framework.authtoken import views as viewsfr
@@ -18,8 +18,9 @@ urlpatterns = [
     path('', include('pokemones.urls')),
     path('api-token-auth/', viewsfr.obtain_auth_token),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
+    path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
     path('google/', GoogleLogin.as_view(), name='google_login'),
-
+    path('github/', GithubLogin.as_view(), name='github_login'),
 ]
 
 urlpatterns += router.urls

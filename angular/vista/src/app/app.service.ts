@@ -20,11 +20,11 @@ export class PokemonService {
   }
 
   login(credentials: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl + '/api-token-auth/', credentials);
+    return this.http.post<any>(this.apiUrl + '/dj-rest-auth/login/', credentials);
   }
 
   register(newUser: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl + '/register/', newUser);
+    return this.http.post<any>(this.apiUrl + '/dj-rest-auth/registration/', newUser);
   }
 
   getPokemon(id: number): Observable<any> {
@@ -35,8 +35,19 @@ export class PokemonService {
 
   googleLogin(token: string): Observable<any> {
     const body = {
-      'access_token': token,
+      'code': token,
     };
     return this.http.post(`${this.apiUrl}/google/`, body);
+  }
+
+  githubLogin(token: string): Observable<any> {
+    const body = {
+      'code': token,
+    };
+    return this.http.post(`${this.apiUrl}/github/`, body);
+  }
+
+  logout(): Observable<any> {
+    return this.http.post(`${this.apiUrl}/dj-rest-auth/logout/`, {});
   }
 }
