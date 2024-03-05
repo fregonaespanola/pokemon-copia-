@@ -1,5 +1,8 @@
-body{
-    background-color: rgb(66, 66, 66);
-    margin: 0;
-    padding: 0;
+@import 'ngx-toastr/toastr';
+
+body {
+  background-color: rgb(66, 66, 66);
+  margin: 0;
+  padding: 0;
 }
+

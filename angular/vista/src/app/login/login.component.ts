@@ -4,6 +4,7 @@ import {PokemonService} from "../app.service";
 import {OAuthService} from "angular-oauth2-oidc";
 import {googleAuthConfig} from "../auth.google.config";
 import {githubAuthConfig} from "../auth.github.config";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-login', templateUrl: './login.component.html', styleUrls: ['./login.component.css']
@@ -13,7 +14,8 @@ export class LoginComponent implements OnInit {
   username: string = "";
   password: string = "";
 
-  constructor(private router: Router, private pokemonService: PokemonService) {
+  constructor(private router: Router, private pokemonService: PokemonService, private toastr: ToastrService) {
+
   }
 
   ngOnInit() {
@@ -27,10 +29,18 @@ export class LoginComponent implements OnInit {
   login() {
     this.pokemonService.login({username: this.username, password: this.password})
       .subscribe(response => {
+
         localStorage.setItem('token', response.key)
+        this.toastr.success('Inicio de sesión exitoso');
         this.router.navigate(['/pokemon']);
       }, error => {
-        console.error('Error al iniciar sesión:', error);
+        for (let field in error.error) {
+          if (field != 'non_field_errors') {
+            this.toastr.error(`${field}: ${error.error[field]}`);
+          } else {
+            this.toastr.error(`${error.error[field]}`);
+          }
+        }
       });
   }
 

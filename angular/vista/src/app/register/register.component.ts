@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {PokemonService} from "../app.service";
 import {Router} from "@angular/router";
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
@@ -13,7 +14,7 @@ export class RegisterComponent {
   password: string = "";
   password2: string = "";
 
-  constructor(private http: HttpClient, private pokemonService: PokemonService, private router: Router) {
+  constructor(private http: HttpClient, private pokemonService: PokemonService, private router: Router, private toastr: ToastrService) {
   }
 
   register() {
@@ -26,11 +27,17 @@ export class RegisterComponent {
       .subscribe(
         response => {
           console.log('Usuario registrado con éxito:', response);
+          this.toastr.success('Usuario registrado con éxito');
           this.router.navigate(['/']);
         },
         error => {
-          console.error('Error al registrar usuario:', error);
-          // Handle the error appropriately, for example, showing an error message to the user
+          for (let field in error.error) {
+            if (field != 'non_field_errors') {
+              this.toastr.error(`${field}: ${error.error[field]}`);
+            } else {
+              this.toastr.error(`${error.error[field]}`);
+            }
+          }
         }
       );
   }

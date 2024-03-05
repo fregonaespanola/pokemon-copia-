@@ -11,6 +11,8 @@ import {FormsModule} from "@angular/forms";
 import {PokemonDetailComponent} from './pokemon-detail/pokemon-detail.component';
 import {OAuthModule} from "angular-oauth2-oidc";
 import {PokemonService} from "./app.service";
+import {ToastrModule} from "ngx-toastr";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [
@@ -25,12 +27,8 @@ import {PokemonService} from "./app.service";
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    OAuthModule.forRoot({
-      resourceServer: {
-        allowedUrls: ['http://www.angular.at/api'],
-        sendAccessToken: true,
-      },
-    }),
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
   providers: [PokemonService],
   bootstrap: [AppComponent,]
