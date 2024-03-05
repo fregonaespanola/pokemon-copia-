@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {Component} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 import {PokemonService} from "../app.service";
 
 @Component({
@@ -8,16 +8,18 @@ import {PokemonService} from "../app.service";
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
-  username: string="";
-  password: string="";
+  username: string = "";
+  password: string = "";
 
-  constructor(private http: HttpClient,private pokemonService:PokemonService) {}
+  constructor(private http: HttpClient, private pokemonService: PokemonService) {
+  }
 
-register() {
-      const newUser = {
-    username: this.username,
-    password: this.password
-  };
+  register() {
+    const newUser = {
+      username: this.username,
+      password1: this.password,
+      password2: this.password
+    };
     this.pokemonService.register(newUser)
       .subscribe(
         response => {

@@ -1,76 +1,74 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {PokemonService} from "../app.service";
-import {OAuthService, OAuthStorage} from "angular-oauth2-oidc";
+import {OAuthService} from "angular-oauth2-oidc";
 import {googleAuthConfig} from "../auth.google.config";
-
+import {githubAuthConfig} from "../auth.github.config";
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: 'app-login', templateUrl: './login.component.html', styleUrls: ['./login.component.css']
 })
 
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   username: string = "";
   password: string = "";
 
-
-  constructor(private http: HttpClient, private router: Router, private pokemonService: PokemonService, private oAuthService: OAuthService, private authStorage: OAuthStorage) {
+  constructor(private router: Router, private pokemonService: PokemonService) {
   }
 
+  ngOnInit() {
+    if (localStorage.getItem('provider') === 'github') {
+      this.handleAuthCallback();
+    } else if (localStorage.getItem('provider') === 'google') {
+      this.handleAuthCallbackGoogle();
+    }
+  }
 
   login() {
-    const credentials = {
-      username: this.username,
-      password: this.password
-    };
-    this.pokemonService.login(credentials)
-      .subscribe(
-        response => {
-          localStorage.setItem('token', response.token)
-          this.router.navigate(['/pokemon']);
-        },
-        error => {
-          console.error('Error al iniciar sesión:', error);
-        }
-      );
+    this.pokemonService.login({username: this.username, password: this.password})
+      .subscribe(response => {
+        localStorage.setItem('token', response.key)
+        this.router.navigate(['/pokemon']);
+      }, error => {
+        console.error('Error al iniciar sesión:', error);
+      });
   }
 
-  async googleLogin() {
+  googleLogin() {
+    localStorage.setItem('provider', 'google');
+    // @ts-ignore
+    const authUrl = `${googleAuthConfig.issuer}?client_id=${googleAuthConfig.clientId}&redirect_uri=${encodeURIComponent(googleAuthConfig.redirectUri)}&scope=${encodeURIComponent(googleAuthConfig.scope)}&response_type=code`;
+    window.location.href = authUrl;
+  }
 
-    // Tweak config for code flow
-// confiure oauth2 service
-    this.oAuthService.configure(googleAuthConfig);
-    // manually configure a logout url, because googles discovery document does not provide it
-    this.oAuthService.logoutUrl = "https://www.google.com/accounts/Logout";
 
-    // loading the discovery document from google, which contains all relevant URL for
-    // the OAuth flow, e.g. login url
-    this.oAuthService.loadDiscoveryDocument().then(() => {
-      // // This method just tries to parse the token(s) within the url when
-      // // the auth-server redirects the user back to the web-app
-      // // It doesn't send the user the the login page
-      this.oAuthService.tryLoginImplicitFlow().then(() => {
+  githubLogin() {
+    localStorage.setItem('provider', 'github');
+    // @ts-ignore
+    const authUrl = `${githubAuthConfig.issuer}?client_id=${githubAuthConfig.clientId}&redirect_uri=${encodeURIComponent(githubAuthConfig.redirectUri)}&scope=${encodeURIComponent(githubAuthConfig.scope)}`;
+    window.location.href = authUrl;
+  }
 
-        // when not logged in, redirecvt to google for login
-        // else load user profile
-        if (!this.oAuthService.hasValidAccessToken()) {
-          this.oAuthService.initLoginFlow()
-        } else {
-          let token = this.authStorage.getItem('access_token');
-          if (token) {
-            this.pokemonService.googleLogin(token).subscribe(response => {
-              localStorage.setItem('token', response.key)
-              this.router.navigate(['/pokemon']);
-            })
-          }
-        }
+  handleAuthCallback() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    if (code) {
+      this.pokemonService.githubLogin(code).subscribe(response => {
+        localStorage.setItem('token', response.key)
+        this.router.navigate(['/pokemon']);
+      });
+    }
+  }
 
-      })
-    });
-
+  handleAuthCallbackGoogle() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    if (code) {
+      this.pokemonService.googleLogin(code).subscribe(response => {
+        localStorage.setItem('token', response.key)
+        this.router.navigate(['/pokemon']);
+      });
+    }
   }
 
 }
