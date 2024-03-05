@@ -13,10 +13,10 @@ export class PokemonService {
   constructor(private http: HttpClient) {
   }
 
-  getPokemons(page: number): Observable<any[]> {
+  getPokemons(page: number): Observable<any> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Token ${token}`);
-    return this.http.get<any[]>(`${this.apiUrl}/api/?page=${page}`, {headers});
+    return this.http.get<any>(`${this.apiUrl}/api/?page=${page}`, {headers});
   }
 
   login(credentials: any): Observable<any> {
