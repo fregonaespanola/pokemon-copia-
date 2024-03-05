@@ -48,6 +48,7 @@ export class PokemonService {
   }
 
   logout(): Observable<any> {
+    localStorage.removeItem('token');
     return this.http.post(`${this.apiUrl}/dj-rest-auth/logout/`, {});
   }
 }
