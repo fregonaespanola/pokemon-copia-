@@ -28,6 +28,11 @@ table {
     padding: 10px;
   }
   
+  td a{
+    text-decoration: none;
+    cursor: pointer;
+    color: white;
+  }
   td img {
     display: block;
     margin: auto;

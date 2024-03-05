@@ -13,7 +13,7 @@
         <img [src]="pokemon.imagen" alt="Imagen de {{ pokemon.nombre }}" width="100">
       </a>
     </td>
-    <td>{{ pokemon.nombre }}</td>
+    <td><a [routerLink]="['/pokemon', pokemon.id]">{{ pokemon.nombre }}</a></td>
     <td><img [src]="pokemon.tipo.imagen" alt="Tipo {{ pokemon.tipo.nombre }}" width="50"></td>
   </tr>
   </tbody>
