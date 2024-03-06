@@ -1,6 +1,9 @@
 # Usa una imagen base de Node
 FROM node:20
 
+# Instala Angular CLI globalmente
+RUN npm install -g @angular/cli
+
 # Establece el directorio de trabajo dentro del contenedor
 WORKDIR /app
 

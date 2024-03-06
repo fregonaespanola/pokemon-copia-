@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-e)uc12v2^%mhg1pcb3y1x5o_y=cmee8+)j_*=p@^c73g@d%0-7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', 'example.com', 'www.example.com', 'api.pokemon.meetmap.es']
 
 # Application definition
 
@@ -50,7 +50,8 @@ INSTALLED_APPS = [
 ]
 SITE_ID = 1
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:4200"  # URL de tu aplicación Angular
+    "http://localhost:4200", 'https://api.pokemon.meetmap.es', 'https://pokemon.meetmap.es'
+    # URL de tu aplicación Angular
 ]
 
 MIDDLEWARE = [
