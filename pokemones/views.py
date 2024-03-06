@@ -64,11 +64,11 @@ class PokemonDetailView(generics.RetrieveAPIView):
 
 class GoogleLogin(SocialLoginView):  # if you want to use Authorization Code Grant, use this
     adapter_class = GoogleOAuth2Adapter
-    callback_url = 'http://localhost:4200'
+    callback_url = 'https://pokemon.meetmap.es'
     client_class = OAuth2Client
 
 
 class GithubLogin(SocialLoginView):  # if you want to use Authorization Code Grant, use this
     adapter_class = GitHubOAuth2Adapter
-    callback_url = 'http://localhost:4200/'
+    callback_url = 'https://pokemon.meetmap.es/'
     client_class = OAuth2Client
