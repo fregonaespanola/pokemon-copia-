@@ -1,13 +1,20 @@
-# Etapa de compilación
-FROM node:20 as build-stage
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
+# Usa una imagen base de Node
+FROM node:20
 
-# Etapa de producción
-FROM nginx:alpine as production-stage
-COPY --from=build-stage /app/dist /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Establece el directorio de trabajo dentro del contenedor
+WORKDIR /app
+
+# Copia el archivo package.json y package-lock.json (si existe)
+COPY package*.json ./
+
+# Instala las dependencias del proyecto
+RUN npm install
+
+# Copia el resto de los archivos del proyecto
+COPY . .
+
+# Expone el puerto en el que el servidor Angular estará escuchando
+EXPOSE 4200
+
+# Comando para iniciar el servidor Angular
+CMD ["npm", "start"]
