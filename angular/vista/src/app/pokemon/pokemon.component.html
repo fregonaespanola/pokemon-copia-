@@ -3,30 +3,22 @@
   <tr>
     <th>Imagen</th>
     <th>Nombre</th>
-    <th>Descripción</th>
-    <th>Ataques</th>
+    <th>Tipo</th>
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let pokemon of pokemons">
+  <tr [style.backgroundColor]="pokemon.tipo.color" *ngFor="let pokemon of pokemons">
     <td>
       <a [routerLink]="['/pokemon', pokemon.id]">
         <img [src]="pokemon.imagen" alt="Imagen de {{ pokemon.nombre }}" width="100">
       </a>
-      <img [src]="pokemon.tipo.imagen" alt="Tipo {{ pokemon.tipo.nombre }}" width="50">
     </td>
-    <td>{{ pokemon.nombre }}</td>
-    <td>{{ pokemon.descripcion }}</td>
-    <td>
-      <ul>
-        <li *ngFor="let ataque of pokemon.ataques">
-          {{ ataque.nombre }} - <img [src]="ataque.tipo.imagen" alt="Tipo {{ ataque.tipo.nombre }}" width="50">
-        </li>
-      </ul>
-    </td>
+    <td><a [routerLink]="['/pokemon', pokemon.id]">{{ pokemon.nombre }}</a></td>
+    <td><img [src]="pokemon.tipo.imagen" alt="Tipo {{ pokemon.tipo.nombre }}" width="50"></td>
   </tr>
   </tbody>
 </table>
-
-
-
+<div class="botones">
+  <button (click)="navigatePage('previous')" [disabled]="currentPage === 1">Página Anterior</button>
+  <button (click)="navigatePage('next')" [disabled]="!hasNextPage">Página Siguiente</button>
+</div>

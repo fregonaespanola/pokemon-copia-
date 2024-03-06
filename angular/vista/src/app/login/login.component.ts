@@ -1,36 +1,84 @@
-import { Component } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {PokemonService} from "../app.service";
+import {OAuthService} from "angular-oauth2-oidc";
+import {googleAuthConfig} from "../auth.google.config";
+import {githubAuthConfig} from "../auth.github.config";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: 'app-login', templateUrl: './login.component.html', styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
-  username: string="";
-  password: string="";
 
-  constructor(private http: HttpClient, private router: Router,private pokemonService:PokemonService) {}
+export class LoginComponent implements OnInit {
+  username: string = "";
+  password: string = "";
 
+  constructor(private router: Router, private pokemonService: PokemonService, private toastr: ToastrService) {
 
+  }
+
+  ngOnInit() {
+    if (localStorage.getItem('provider') === 'github') {
+      this.handleAuthCallback();
+    } else if (localStorage.getItem('provider') === 'google') {
+      this.handleAuthCallbackGoogle();
+    }
+  }
 
   login() {
-        const credentials = {
-      username: this.username,
-      password: this.password
-    };
-    this.pokemonService.login(credentials)
-      .subscribe(
-        response => {
-          localStorage.setItem('token',response.token)
-          this.router.navigate(['/pokemon']);
-        },
-        error => {
-          console.error('Error al iniciar sesión:', error);
-        }
-      );
-  }
-}
+    this.pokemonService.login({username: this.username, password: this.password})
+      .subscribe(response => {
 
+        localStorage.setItem('token', response.key)
+        this.toastr.success('Inicio de sesión exitoso');
+        this.router.navigate(['/pokemon']);
+      }, error => {
+        for (let field in error.error) {
+          if (field != 'non_field_errors') {
+            this.toastr.error(`${field}: ${error.error[field]}`);
+          } else {
+            this.toastr.error(`${error.error[field]}`);
+          }
+        }
+      });
+  }
+
+  googleLogin() {
+    localStorage.setItem('provider', 'google');
+    // @ts-ignore
+    const authUrl = `${googleAuthConfig.issuer}?client_id=${googleAuthConfig.clientId}&redirect_uri=${encodeURIComponent(googleAuthConfig.redirectUri)}&scope=${encodeURIComponent(googleAuthConfig.scope)}&response_type=code`;
+    window.location.href = authUrl;
+  }
+
+
+  githubLogin() {
+    localStorage.setItem('provider', 'github');
+    // @ts-ignore
+    const authUrl = `${githubAuthConfig.issuer}?client_id=${githubAuthConfig.clientId}&redirect_uri=${encodeURIComponent(githubAuthConfig.redirectUri)}&scope=${encodeURIComponent(githubAuthConfig.scope)}`;
+    window.location.href = authUrl;
+  }
+
+  handleAuthCallback() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    if (code) {
+      this.pokemonService.githubLogin(code).subscribe(response => {
+        localStorage.setItem('token', response.key)
+        this.router.navigate(['/pokemon']);
+      });
+    }
+  }
+
+  handleAuthCallbackGoogle() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    if (code) {
+      this.pokemonService.googleLogin(code).subscribe(response => {
+        localStorage.setItem('token', response.key)
+        this.router.navigate(['/pokemon']);
+      });
+    }
+  }
+
+}

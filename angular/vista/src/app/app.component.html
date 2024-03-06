@@ -1,1 +1,16 @@
-<router-outlet />
+<header>
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/pokemon">Listado</a></li>
+      <li class="cerrar" (click)="logout()"><a>Cerrar Sesion</a></li>
+
+    </ul>
+  </nav>
+</header>
+
+<router-outlet></router-outlet>
+
+<footer>
+  <p>© 2022 My Website</p>
+</footer>

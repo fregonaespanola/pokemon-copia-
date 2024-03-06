@@ -8,5 +8,12 @@
     <input type="password" id="password" name="password" [(ngModel)]="password" required>
   </div>
   <button type="submit">Iniciar sesión</button>
+  <div class="botones">
+    <button class="oauth" (click)="googleLogin()">Google</button>
+    <button class="oauth" (click)="githubLogin()">Github</button>
+  </div>
 </form>
 
+<div class="register">
+<a href="/register">Registro</a>
+</div>
